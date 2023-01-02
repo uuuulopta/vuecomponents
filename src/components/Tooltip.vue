@@ -1,7 +1,7 @@
 <template>
-    <div :id="id" role="tooltip" :style="style"
-    :class="tooltipClass">
-    <slot></slot>
+    <div :id="id" data-show="false" role="tooltip" :style="style" @mouseover="hover"
+    class="absolute z-10 py-1 px-3 text-xs font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 dark:bg-gray-700">
+    <div ref="slot"><slot></slot></div>
 </div>
 
 </template>
@@ -12,8 +12,8 @@
 </style>
 
 <script setup>
-import {onMounted, ref} from 'vue';
-
+import {onMounted, ref,} from 'vue';
+import { createPopper } from '@popperjs/core';
 const props = defineProps({
     id: {
         type: String,
@@ -22,15 +22,30 @@ const props = defineProps({
         type: String,
     },
 });
-let tooltipClass = ref("absolute z-10 py-2 px-3 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-100 transition-opacity duration-300 dark:bg-gray-700")
-let style=ref("");
-onMounted(() => {
-const el = document.getElementById(props.explains).getBoundingClientRect()
-const tooltip = document.getElementById(props.id).getBoundingClientRect()
-style.value = `top:${el.y - 35}px;left:${el.x -  tooltip.width * 1/3}px;`
+let slot = ref();
+
+onMounted( () => {
+const tooltip = document.getElementById(props.id);
+const target = document.getElementById(props.explains);
+const popper = createPopper(target,tooltip, {
+    placement: 'top',
+
+});
+
+
+target.addEventListener('mouseover', () => {
+    tooltip.style = "opacity:1;"
+    popper.update();
+})
+target.addEventListener('mouseout', () => {
+    tooltip.style = "opacity:0;"
+    popper.update();
+})
 
 
 })
+
+
 
 
 
