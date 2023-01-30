@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.6",
+    "dropzone": "^6.0.0-beta.2",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
     "vue": "^3.2.45"
   },
   "devDependencies": {
